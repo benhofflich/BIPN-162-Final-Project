@@ -1,16 +1,20 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+The following code was taken from the paper's GitHub respository. The purpose of this file is to train the models. It outputs a trained model that is 
+saved under the savedModels folder to be used by testDemo.py. There were complications with running the code due to outdated packages and incorrect syntax. 
+This code requires a lot of space and can only be run successfully through Google Colab. 
+"""
+###------------------------------------------------------------
+# # the notebook was mounted to my current Google Drive and moved to my BIPN162 folder.
+# # this was to make it so that this file could access all the other files it needed to run and that all of these files were in the same directory.
+# from google.colab import drive
+# drive.mount('/content/drive')
+# %cd drive/MyDrive/BIPN162/
 
-# In[9]:
+# # the tensorflow package had to be downgraded to version 1.14 because one module of tensorflow used in this file is not availible in any other versions
+# %tensorflow_version 1.14
 
-
-import model as mm
-
-
-# In[13]:
-
-
-# import some librariesw
+###-------------------------------------------------------------
+# import some libraries
 import os,time
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 import numpy as np
@@ -42,84 +46,13 @@ if K>1:
 if restoreWeights:
     wts=sf.getWeights('savedModels/'+restoreFromModel)
 #--------------------------------------------------------------------------
-# these are functions from mm #had trouble calling them before
-
-# def createLayer(x, szW, trainning,lastLayer):
-#     """
-#     This function create a layer of CNN consisting of convolution, batch-norm,
-#     and ReLU. Last layer does not have ReLU to avoid truncating the negative
-#     part of the learned noise and alias patterns.
-#     """
-#     W=tf.compat.v1.get_variable('W',shape=szW,initializer=tf.contrib.layers.xavier_initializer())
-#     x = tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
-#     xbn=tf.layers.batch_normalization(x,training=trainning,fused=True,name='BN')
-
-#     if not(lastLayer):
-#         return tf.nn.relu(xbn)
-#     else:
-#         return xbn
-
-# ## drn func from model.py because its having trouble reading it
-# def dw(inp,trainning,nLay):
-#     """
-#     This is the Dw block as defined in the Fig. 1 of the MoDL paper
-#     It creates an n-layer (nLay) residual learning CNN.
-#     Convolution filters are of size 3x3 and 64 such filters are there.
-#     nw: It is the learned noise
-#     dw: it is the output of residual learning after adding the input back.
-#     """
-#     lastLayer=False
-#     nw={}
-#     nw['c'+str(0)]=inp
-#     szW={}
-#     szW = {key: (3,3,64,64) for key in range(2,nLay)}
-#     szW[1]=(3,3,2,64)
-#     szW[nLay]=(3,3,64,2)
-
-#     for i in np.arange(1,nLay+1):
-#         if i==nLay:
-#             lastLayer=True
-#         with tf.compat.v1.variable_scope('Layer'+str(i)):
-#             nw['c'+str(i)]=createLayer(nw['c'+str(i-1)],szW[i],trainning,lastLayer)
-
-#     with tf.name_scope('Residual'):
-#         shortcut=tf.identity(inp)
-#         dw=shortcut+nw['c'+str(nLay)]
-#     return dw
-
-# # make model function 
-# def makeModel(atb,csm,mask,training,nLayers,K,gradientMethod):
-#     """
-#     This is the main function that creates the model.
-
-#     """
-#     out={}
-#     out['dc0']=atb
-#     with tf.name_scope('myModel'):
-#         with tf.compat.v1.variable_scope('Wts',reuse=tf.compat.v1.AUTO_REUSE):
-#             for i in range(1,K+1):
-#                 j=str(i)
-#                 out['dw'+j]=dw(out['dc'+str(i-1)],training,nLayers)
-#                 lam1=getLambda()
-#                 rhs=atb + lam1*out['dw'+j]
-#                 if gradientMethod=='AG':
-#                     out['dc'+j]=dc(rhs,csm,mask,lam1)
-#                 elif gradientMethod=='MG':
-#                     if training:
-#                         out['dc'+j]=dcManualGradient(rhs)
-#                     else:
-#                         out['dc'+j]=dc(rhs,csm,mask,lam1)
-#     return out
-
-#--------------------------------------
 
 #%%Generate a meaningful filename to save the trainined models for testing
 print ('*************************************************')
 start_time=time.time()
 saveDir='savedModels/'
 cwd=os.getcwd()
-directory=saveDir + datetime.now().strftime("%m-%d-%Y %H:%M%p")+ str(nLayers)+'L_'+str(K)+'K_'+str(epochs)+'E_'+gradientMethod
-
+directory=saveDir + datetime.now().strftime("%d-%b-%Y %I:%M %P") ## save the trained model in the savedModels folder and name it according to this format
 if not os.path.exists(directory):
     os.makedirs(directory)
 sessFileName= directory+'/model'
@@ -133,7 +66,7 @@ csmT = tf.compat.v1.placeholder(tf.complex64,shape=(None,12,256,232),name='csm')
 maskT= tf.compat.v1.placeholder(tf.complex64,shape=(None,256,232),name='mask')
 atbT = tf.compat.v1.placeholder(tf.float32,shape=(None,256,232,2),name='atb')
 
-out= mm.makeModel(atbT,csmT,maskT,False,nLayers,K,gradientMethod) ## uses deleted package
+out= mm.makeModel(atbT,csmT,maskT,False,nLayers,K,gradientMethod) 
 predTst=out['dc'+str(K)]
 predTst=tf.identity(predTst,name='predTst')
 sessFileNameTst=directory+'/modelTst'
@@ -147,7 +80,7 @@ print ('testing model saved:' +savedFile)
 trnOrg,trnAtb,trnCsm,trnMask=sf.getData('training')
 trnOrg,trnAtb=sf.c2r(trnOrg),sf.c2r(trnAtb)
 
-#%%
+
 tf.compat.v1.reset_default_graph()
 csmP = tf.compat.v1.placeholder(tf.compat.v1.complex64,shape=(None,None,None,None),name='csm')
 maskP= tf.compat.v1.placeholder(tf.compat.v1.complex64,shape=(None,None,None),name='mask')
@@ -216,7 +149,7 @@ with tf.compat.v1.Session(config=config) as sess:
                 avgTrnLoss=np.mean(totalLoss)
                 lossSum=sess.run(lossSumT,feed_dict={lossT:avgTrnLoss})
                 writer.add_summary(lossSum,ep)
-                totalLoss=[] #after each epoch empty the list of total loos
+                totalLoss=[] #after each epoch empty the list of total loss
         except tf.compat.v1.errors.OutOfRangeError:
             break
     savedfile=saver.save(sess, sessFileName,global_step=ep,write_meta_graph=True)
