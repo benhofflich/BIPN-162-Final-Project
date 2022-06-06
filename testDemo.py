@@ -1,20 +1,15 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
+""" 
+The following code was taken from the paper's GitHub respository. The purpose of this file is to use the trained model to reconstruct a sample image. 
+Since the paper and this code is old, some packages, functions, and syntax needed to be modified in order to run. This was run on Google Colab.
 """
-Created on Fri Mar 30 12:39:26 2018
-This is the demo code. That should run without making any changes.
-Please ensure that demoImage.hdf5 is in the same directory as this file tstDemo.py.
+###-----------------------------------------------------------
+# # the notebook was mounted to my current Google Drive and moved to my BIPN162 folder.
+# # this was to make it so that this file could access all the other files it needed to run and that all of these files were in the same directory.
 
-This code will load the learned model from the subdirectory 'savedModels'
-
-This test code will load an  image for  from the demoImage.hdf5 file.
-
-@author: haggarwal
-"""
+# from google.colab import drive
+# drive.mount('/content/drive')
+# %cd drive/MyDrive/BIPN162/
+###-----------------------------------------------------------
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 import numpy as np
@@ -24,13 +19,16 @@ import supportingFunctions as sf
 
 
 cwd=os.getcwd()
-# tf.reset_default_graph()
-tf.compat.v1.reset_default_graph()
+# # all the tensorflow functions don't work with the newest tensorflow version so all lines that called this function were manually changed to version 1
+# # this is because I had trouble installing the old tensorflow version because my python version was incompatible
+tf.compat.v1.reset_default_graph() # changed from: tf.reset_default_graph()
 
 #%% choose a model from savedModels directory
 
-#subDirectory='14Mar_1105pm'
-subDirectory='04Jun_0356pm_5L_10K_50E_AG'
+# # these subDirectories refer to the name the trained model is saved under
+# # each run through trn.py saves a new trained model
+#subDirectory='14Mar_1105pm' #pre-trained model taken from paper's GitHub
+subDirectory='06-Jun-2022 10:27 pm' #one of our trained models
 #%%Read the testing data from dataset.hdf5 file
 
 #tstOrg is the original ground truth
@@ -106,12 +104,4 @@ plt.title('Output, PSNR='+ str(psnrRec.round(2)) +' dB')
 plt.axis('off')
 plt.subplots_adjust(left=0, right=1, top=1, bottom=0,wspace=.01)
 plt.show()
-
-
-# IT WORKS!!
-
-# In[ ]:
-
-
-
 
