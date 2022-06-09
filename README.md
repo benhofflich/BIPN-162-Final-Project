@@ -34,4 +34,5 @@ https://github.com/guillaumefrd/brain-tumor-mri-dataset/blob/master/images/slice
 ## How to Run
 - `savedModels`, `demoImage.hdf5`, `model.py`, `supportingFunctions.py`, `testDemo.py`, `trn.py`, `dataset.hdf5` must be in the same directory
 - `trn.py` must be run on Google Colab
-- First run `trn.py` with the training dataset. After the model is trained, it will save in the `savedModels` folder and be named according to the date and time it was run. To replicate the paper's results, run `testDemo.py` and specify which model you would like to use. To run the additional dataset, run `testDemo.ipnb` and also specify which model you would like to use.
+- First run `trn.py` with the training dataset. After the model is trained, it will save in the `savedModels` folder and be named according to the date and time it was run. 
+- To replicate the paper's results, run `testDemo.py` and specify which model you would like to use. To run the additional dataset, run `testDemo.ipnb` and also specify which model you would like to use.
