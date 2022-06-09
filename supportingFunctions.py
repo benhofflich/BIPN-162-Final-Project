@@ -57,6 +57,8 @@ def normalize01(img):
 
 #%%
 
+##--------------------------------------------------------------------------------
+## added on to normalize the images from the additional dataset
 def normalize02(addImg):
     """
     Normalize the image between o and 1
@@ -65,7 +67,7 @@ def normalize02(addImg):
     return normAddImg
 
 #%%
-
+## added to resize the additional dataset images
 def resize(addImg,newDim = [256,232]):
     oldDim = addImg.shape
     tempImg = np.zeros([newDim[0],oldDim[1]])
@@ -85,6 +87,7 @@ def resize(addImg,newDim = [256,232]):
         newImg[count,:] = interpline
         count+=1   
     return newImg
+##--------------------------------------------------------------------------------
 
 #%%
 def np_crop(data, shape=(320,320)):
@@ -155,7 +158,8 @@ def getTestingData():
     print(mask.shape)
     return org,atb,csm,mask
 
-#Here I am reading one single image from  demoImage.hdf5 for testing demo code
+##------------------------------------------------------------------------------------------------------
+## this function was appended to the original code to read the data from the additional dataset
 def getAdditionalTestingData(imageNum = 0):
     print('Reading the data. Please wait...')
     filename='demoImage.hdf5' #set the correct path here
@@ -177,6 +181,7 @@ def getAdditionalTestingData(imageNum = 0):
     toc()
     print('Successfully undersampled data!')
     return org,atb,csm,mask
+##--------------------------------------------------------------------------------------------------------
 
 #%%
 def piA(x,csm,mask,nrow,ncol,ncoil):
