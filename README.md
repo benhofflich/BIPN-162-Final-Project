@@ -19,11 +19,11 @@ https://github.com/guillaumefrd/brain-tumor-mri-dataset/blob/master/images/slice
 
 `demoImage.hdf5` : the testing image used in `testDemo.py` for image reconstruction.
 
-`model.py` : contains code for creating the CNN model and the conjugate gradient algorithm. This is a supporting file.
+`model.py` : contains code for creating the CNN model and the conjugate gradient algorithm.
 
-`supportingFunctions.py` : contains supporting functions for calculating the time and PSNR values, and reading the dataset. This is a supporting file.
+`supportingFunctions.py` : contains supporting functions for calculating the time and PSNR values, and reading the dataset. This also contains functions that we added so that we could read in the additional dataset.
 
-`testDemo.py` : the file for testing the trained model against the testing image. This is one of the main files. 
+`testDemo.ipnb` : the file for testing the trained model against the testing image. This was also used to test the additional dataset and thus contains code that we added for that purpose. 
 
 `trn.py` : the file for training the model. It will save the trained model as a folder inside the `savedModels` folder. This is the main file that we will manipulating. 
 
