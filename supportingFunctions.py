@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 """
 Created on Aug 6th, 2018
 
@@ -57,9 +51,40 @@ def normalize01(img):
         img=np.reshape(img,(nimg,r,c))
     img2=np.empty(img.shape,dtype=img.dtype)
     for i in range(nimg):
-        img2[i]=div0(img[i]-img[i].min(),img[i].ptp())
-        #img2[i]=(img[i]-img[i].min())/(img[i].max()-img[i].min())
+        #img2[i]=div0(img[i]-img[i].min(),img[i].ptp())
+        img2[i]=(img[i]-img[i].min())/(img[i].max()-img[i].min())
     return np.squeeze(img2).astype(img.dtype)
+
+#%%
+
+def normalize02(addImg):
+    """
+    Normalize the image between o and 1
+    """
+    normAddImg = (addImg-addImg.min())/(addImg.max()-addImg.min())
+    return normAddImg
+
+#%%
+
+def resize(addImg,newDim = [256,232]):
+    oldDim = addImg.shape
+    tempImg = np.zeros([newDim[0],oldDim[1]])
+    newImg = np.zeros(newDim)
+
+    count = 0
+    for i in range(oldDim[1]):
+        line = addImg[:,i]
+        interpline = np.interp(np.arange(0, len(line), oldDim[0]/newDim[0]), np.arange(0, len(line)), line)
+        tempImg[:,count] = interpline
+        count+=1
+
+    count = 0
+    for i in range(newDim[0]):
+        line = tempImg[i,:]
+        interpline = np.interp(np.arange(0, len(line), oldDim[1]/newDim[1]), np.arange(0, len(line)), line)
+        newImg[count,:] = interpline
+        count+=1   
+    return newImg
 
 #%%
 def np_crop(data, shape=(320,320)):
@@ -106,6 +131,7 @@ def getData(trnTst='testing',num=100,sigma=.01):
     if trnTst=='testing':
         atb=c2r(atb)
     return org,atb,csm,mask
+    
 
 #Here I am reading one single image from  demoImage.hdf5 for testing demo code
 def getTestingData():
@@ -123,8 +149,34 @@ def getTestingData():
     atb=c2r(atb)
     toc()
     print('Successfully undersampled data!')
+    print(org.shape)
+    print(atb.shape)
+    print(csm.shape)
+    print(mask.shape)
     return org,atb,csm,mask
 
+#Here I am reading one single image from  demoImage.hdf5 for testing demo code
+def getAdditionalTestingData(imageNum = 0):
+    print('Reading the data. Please wait...')
+    filename='demoImage.hdf5' #set the correct path here
+    tic()
+    with h5.File(filename,'r') as f:
+        csm,mask=f['tstCsm'][:],f['tstMask'][:]
+        
+    filename = 'images.npy'
+    f = np.load(filename)
+    org = np.zeros([1,256,232])
+    org[0] = resize(f[imageNum])
+
+    toc()
+    print('Successfully read the data from file!')
+    print('Now doing undersampling....')
+    tic()
+    atb=generateUndersampled(org,csm,mask,sigma=.01)
+    atb=c2r(atb)
+    toc()
+    print('Successfully undersampled data!')
+    return org,atb,csm,mask
 
 #%%
 def piA(x,csm,mask,nrow,ncol,ncoil):
@@ -247,7 +299,8 @@ def assignWts(sess1,nLay,wts):
     # assign W,b,beta gamma ,mean,variance
     #for each layer at a time
     for i in np.arange(1,nLay+1):
-        tfV=[v for v in var if 'conv'+str(i) +str('/') in v.name              or 'Layer'+str(i)+str('/') in v.name and 'Adam' not in v.name]
+        tfV=[v for v in var if 'conv'+str(i) +str('/') in v.name \
+             or 'Layer'+str(i)+str('/') in v.name and 'Adam' not in v.name]
         npV=[v for v in wts.keys() if  ('Layer'+str(i))+str('/') in v or'conv'+str(i)+str('/') in v]
         tfv2=[v for v in tfV if 'W:0' in v.name]
         npv2=[v for v in npV if 'W:0' in v]
