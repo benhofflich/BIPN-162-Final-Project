@@ -23,7 +23,9 @@ https://github.com/guillaumefrd/brain-tumor-mri-dataset/blob/master/images/slice
 
 `supportingFunctions.py` : contains supporting functions for calculating the time and PSNR values, and reading the dataset. This also contains functions that we added so that we could read in the additional dataset.
 
-`testDemo.ipnb` : the file for testing the trained model against the testing image. This was also used to test the additional dataset and thus contains code that we added for that purpose. 
+`testDemo.py` : the file for testing the trained model against the testing image. This was used for replicating the paper's results. 
+
+`testDemo.ipnb` : the file for testing the trained model against the testing image. This was used to test the additional dataset.
 
 `trn.py` : the file for training the model. It will save the trained model as a folder inside the `savedModels` folder. This is the main file that we will manipulating. 
 
