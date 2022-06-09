@@ -25,14 +25,14 @@ https://github.com/guillaumefrd/brain-tumor-mri-dataset/blob/master/images/slice
 
 `testDemo.py` : the file for testing the trained model against the testing image. This was used for replicating the paper's results. 
 
-`testDemo.ipnb` : the file for testing the trained model against the testing image. This was used to test the additional dataset.
+`tstDemo.ipynb` : the file for testing the trained model against the testing image. This was used to test the additional dataset.
 
 `trn.py` : the file for training the model. It will save the trained model as a folder inside the `savedModels` folder. This is the main file that we will manipulating. 
 
 `dataset.hdf5` : the file is too large to upload to GitHub so it has to be downloaded via [this link](https://drive.google.com/file/d/1qp-l9kJbRfQU1W5wCjOQZi7I3T6jwA37/view?usp=sharing). Contains the training dataset for `trn.py`. 
 
 ## How to Run
-- `savedModels`, `demoImage.hdf5`, `model.py`, `supportingFunctions.py`, `testDemo.py`, `trn.py`, `dataset.hdf5` must be in the same directory
+- `savedModels`, `demoImage.hdf5`, `model.py`, `supportingFunctions.py`, `testDemo.py`, `trn.py`, `dataset.hdf5` `tstDemo.ipynb` must be in the same directory
 - `trn.py` must be run on Google Colab
 - First run `trn.py` with the training dataset. After the model is trained, it will save in the `savedModels` folder and be named according to the date and time it was run. 
-- To replicate the paper's results, run `testDemo.py` and specify which model you would like to use. To run the additional dataset, run `testDemo.ipnb` and also specify which model you would like to use.
+- To replicate the paper's results, run `testDemo.py` and specify which model you would like to use. To run the additional dataset, run `tstDemo.ipynb` and also specify which model you would like to use.
