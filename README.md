@@ -31,6 +31,8 @@ https://github.com/guillaumefrd/brain-tumor-mri-dataset/blob/master/images/slice
 
 `dataset.hdf5` : the file is too large to upload to GitHub so it has to be downloaded via [this link](https://drive.google.com/file/d/1qp-l9kJbRfQU1W5wCjOQZi7I3T6jwA37/view?usp=sharing). Contains the training dataset for `trn.py`. 
 
+`images.npy`, `mask.npy` : numPy arrays of the additional dataset. The files are too large to upload and are availible through the additional dataset link and instructions.
+
 ## How to Run
 - `savedModels`, `demoImage.hdf5`, `model.py`, `supportingFunctions.py`, `testDemo.py`, `trn.py`, `dataset.hdf5` `tstDemo.ipynb` must be in the same directory
 - `trn.py` must be run on Google Colab
